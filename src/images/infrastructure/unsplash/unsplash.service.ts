@@ -1,0 +1,41 @@
+import { HttpService } from '@nestjs/axios';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
+import { getEnvName } from 'src/utils/getEnvName';
+import { ImageEntity } from '../../domain/entities/image.entity';
+import { ImageRepository } from '../../domain/repositories/image.repository';
+
+@Injectable()
+export class UnsplashService implements ImageRepository {
+  private readonly apiUrl: string;
+  private readonly accessKey: string;
+  private readonly imagesPerPage: number;
+
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {
+    this.apiUrl = this.configService.get(getEnvName('UNSPLASH_API_URL')) as string;
+    this.accessKey = this.configService.get(getEnvName('UNSPLASH_CLIENT_ID')) as string;
+    this.imagesPerPage = this.configService.get(getEnvName('IMAGES_PER_PAGE')) as number;
+  }
+
+  async searchImages(query: string): Promise<ImageEntity[]> {
+    const response = await firstValueFrom(this.httpService.get(`${this.apiUrl}/search/photos`, {
+      params: {
+        query,
+        client_id: this.accessKey,
+        per_page: this.imagesPerPage,
+      },
+    }));
+
+    // return response.data.results.map(() => {
+    //   return new ImageEntity(
+    //     "", "", ""
+    //   );
+    // });
+
+    return response.data
+  }
+}

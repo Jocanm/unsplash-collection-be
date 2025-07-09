@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 
 @Controller('collections')
 export class CollectionsController {
-  constructor(private readonly collectionsService: CollectionsService) {}
+  constructor(private readonly collectionsService: CollectionsService) { }
 
   @Post()
   create(@Body() createCollectionDto: CreateCollectionDto) {
@@ -14,5 +14,13 @@ export class CollectionsController {
   @Get()
   findAll() {
     return this.collectionsService.findAll();
+  }
+
+  @Post(':collectionId/images/:imageId')
+  addImageToCollection(
+    @Param('collectionId', ParseUUIDPipe) collectionId: string,
+    @Param('imageId', ParseUUIDPipe) imageId: string,
+  ) {
+    return this.collectionsService.addImageToCollection(collectionId, imageId);
   }
 }
