@@ -38,15 +38,16 @@ export class UnsplashService implements ImageRepository {
     return new ImageEntity({
       id: photo.id,
       slug: photo.slug,
-      createdAt: photo.created_at,
-      updatedAt: photo.updated_at,
       width: photo.width,
       height: photo.height,
-      altDescription: photo.alt_description,
-      regularUrl: photo.urls.regular,
       smallUrl: photo.urls.small,
       thumbUrl: photo.urls.thumb,
+      createdAt: photo.created_at,
+      updatedAt: photo.updated_at,
+      regularUrl: photo.urls.regular,
       downloadUrl: photo.links.download,
+      altDescription: photo.alt_description,
+
       userName: photo.user.name,
       userProfileImage: photo.user.profile_image.medium,
     });
