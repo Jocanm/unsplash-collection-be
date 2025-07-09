@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { getEnvName } from 'src/utils/getEnvName';
 import { ImageEntity } from '../../domain/entities/image.entity';
 import { ImageRepository } from '../../domain/repositories/image.repository';
+import { UnsplashPhotoItem, UnsplashPhotosResponseType } from './types/unsplash-photos-response.type';
 
 @Injectable()
 export class UnsplashService implements ImageRepository {
@@ -22,7 +23,7 @@ export class UnsplashService implements ImageRepository {
   }
 
   async searchImages(query: string): Promise<ImageEntity[]> {
-    const response = await firstValueFrom(this.httpService.get(`${this.apiUrl}/search/photos`, {
+    const response = await firstValueFrom(this.httpService.get<UnsplashPhotosResponseType>(`${this.apiUrl}/search/photos`, {
       params: {
         query,
         client_id: this.accessKey,
@@ -30,12 +31,24 @@ export class UnsplashService implements ImageRepository {
       },
     }));
 
-    // return response.data.results.map(() => {
-    //   return new ImageEntity(
-    //     "", "", ""
-    //   );
-    // });
+    return response.data.results.map(photo => this.mapToImageEntity(photo));
+  }
 
-    return response.data
+  private mapToImageEntity(photo: UnsplashPhotoItem): ImageEntity {
+    return new ImageEntity({
+      id: photo.id,
+      slug: photo.slug,
+      createdAt: photo.created_at,
+      updatedAt: photo.updated_at,
+      width: photo.width,
+      height: photo.height,
+      altDescription: photo.alt_description,
+      regularUrl: photo.urls.regular,
+      smallUrl: photo.urls.small,
+      thumbUrl: photo.urls.thumb,
+      downloadUrl: photo.links.download,
+      userName: photo.user.name,
+      userProfileImage: photo.user.profile_image.medium,
+    });
   }
 }
