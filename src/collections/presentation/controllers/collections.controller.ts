@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 import { AddImageToCollectionUseCase } from 'src/collections/application/use-cases/add-image-to-collection.use-case';
 import { CreateCollectionUseCase } from 'src/collections/application/use-cases/create-collection.use-case';
 import { DeleteCollectionUseCase } from 'src/collections/application/use-cases/delete-collection.use-case copy';
 import { GetCollectionByIdUseCase } from 'src/collections/application/use-cases/get-collection-by-id.use-case';
 import { GetCollectionsUseCase } from 'src/collections/application/use-cases/get-collections.use-case';
 import { CreateCollectionDto } from '../dtos/create-collection.dto';
+import { FindAllCollectionsDto } from '../dtos/find-all-collections.dto';
 
 @Controller('collections')
 export class CollectionsController {
@@ -17,9 +18,12 @@ export class CollectionsController {
   ) { }
 
   @Get()
-  findAll() {
+  findAll(
+    @Query() options: FindAllCollectionsDto
+  ) {
     return this.getCollectionsUseCase.execute({
-      order: 'desc',
+      query: options.query?.trim(),
+      order: options.order ?? 'desc',
     });
   }
 

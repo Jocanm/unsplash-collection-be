@@ -11,7 +11,10 @@ export class PrismaCollectionRepository implements CollectionRepository {
   ) { }
   async findAll(options: FindAllCollectionsOptions): Promise<CollectionEntity[]> {
     const collections = await this.db.collection.findMany({
-      orderBy: { createdAt: options.order }
+      orderBy: { createdAt: options.order },
+      where: {
+        name: { contains: options.query, mode: 'insensitive' }
+      }
     });
     return collections.map(this.mapToCollectionEntity);
   }

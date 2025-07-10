@@ -7,6 +7,7 @@ export interface CreateCollectionDto {
 
 export interface FindAllCollectionsOptions {
   order?: 'asc' | 'desc';
+  query?: string;
 }
 
 export abstract class CollectionRepository {
