@@ -39,7 +39,7 @@ services:
     depends_on:
       - backend
     networks:
-      - mi-red
+      - private_network
 
 volumes:
   postgres_data:
