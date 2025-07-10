@@ -8,7 +8,7 @@ import { ImageRepository } from '../../domain/repositories/image.repository';
 import { UnsplashPhotoItem, UnsplashPhotosResponseType } from './types/unsplash-photos-response.type';
 
 @Injectable()
-export class UnsplashService implements ImageRepository {
+export class UnsplashImageRepository implements ImageRepository {
   private readonly apiUrl: string;
   private readonly accessKey: string;
   private readonly imagesPerPage: number;

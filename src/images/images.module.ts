@@ -2,7 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { GetImagesUseCase } from './application/use-cases/get-images.use-case';
 import { ImageRepository } from './domain/repositories/image.repository';
-import { UnsplashService } from './infrastructure/unsplash/unsplash.service';
+import { UnsplashImageRepository } from './infrastructure/unsplash/unsplash-image.repository';
 import { ImagesController } from './presentation/controllers/images.controller';
 
 @Module({
@@ -11,7 +11,7 @@ import { ImagesController } from './presentation/controllers/images.controller';
     GetImagesUseCase,
     {
       provide: ImageRepository,
-      useClass: UnsplashService,
+      useClass: UnsplashImageRepository,
     },
   ],
   imports: [HttpModule],
