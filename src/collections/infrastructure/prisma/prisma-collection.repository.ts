@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Collection } from '@prisma/client';
 import { CollectionEntity } from "src/collections/domain/entities/collection.entity";
 import { CollectionRepository, CreateCollectionDto } from "src/collections/domain/repositories/collection.repository";
@@ -34,14 +34,19 @@ export class PrismaCollectionRepository implements CollectionRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const collection = await this.findById(id);
-    if (!collection) {
-      throw new NotFoundException(`Collection with id ${id} not found`);
-    }
-
     await this.db.collection.delete({
       where: { id }
     });
+  }
+
+  async addImageToCollection(collectionId: string, image: string): Promise<CollectionEntity> {
+    const collection = await this.db.collection.update({
+      where: { id: collectionId },
+      data: {
+        images: { push: image },
+      },
+    });
+    return this.mapToCollectionEntity(collection);
   }
 
   private mapToCollectionEntity(data: Collection): CollectionEntity {

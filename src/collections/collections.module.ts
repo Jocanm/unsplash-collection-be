@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AddImageToCollectionUseCase } from './application/use-cases/add-image-to-collection.use-case';
 import { CreateCollectionUseCase } from './application/use-cases/create-collection.use-case';
 import { DeleteCollectionUseCase } from './application/use-cases/delete-collection.use-case copy';
 import { GetCollectionByIdUseCase } from './application/use-cases/get-collection-by-id.use-case';
@@ -14,6 +15,7 @@ import { CollectionsController } from './presentation/controllers/collections.co
     GetCollectionByIdUseCase,
     CreateCollectionUseCase,
     DeleteCollectionUseCase,
+    AddImageToCollectionUseCase,
     {
       provide: CollectionRepository,
       useClass: PrismaCollectionRepository,
