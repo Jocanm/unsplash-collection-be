@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class CreateCollectionDto {
   @IsString()
@@ -8,7 +8,6 @@ export class CreateCollectionDto {
 
   @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
   @IsString({ each: true })
   @MaxLength(255, { each: true })
   images?: string[];
