@@ -28,6 +28,10 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY package.json ./
 
+# --- LÍNEA CLAVE AÑADIDA ---
+# Copiamos el schema de Prisma para poder correr migraciones en producción
+COPY --from=builder /app/prisma ./prisma
+
 # Expone el puerto donde corre tu aplicación NestJS (dentro de Docker)
 EXPOSE 3000
 
