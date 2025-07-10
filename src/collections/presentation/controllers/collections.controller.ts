@@ -18,7 +18,9 @@ export class CollectionsController {
 
   @Get()
   findAll() {
-    return this.getCollectionsUseCase.execute();
+    return this.getCollectionsUseCase.execute({
+      order: 'desc',
+    });
   }
 
   @Get(':id')
