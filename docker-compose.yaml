@@ -14,6 +14,32 @@ services:
     networks:
       - private_network
 
+  backend:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    env_file: .env
+    environment:
+      DATABASE_URL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public'
+    networks:
+      - private_network
+
+  nginx:
+    image: nginx:1.25-alpine
+    restart: always
+    ports:
+      # Expone el puerto 80 (HTTP) del VPS al puerto 80 del contenedor Nginx
+      - '80:80'
+      # Eventualmente aquí también expondremos el puerto 443 para HTTPS
+      # - "443:443"
+    volumes:
+      # Monta tu archivo de configuración de Nginx
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    networks:
+      - mi-red
 
 volumes:
   postgres_data:
