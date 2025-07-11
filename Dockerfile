@@ -28,6 +28,11 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY package.json ./
 
+
+# --- LÍNEA CLAVE AÑADIDA ---
+# Copiamos el schema de Prisma para poder correr migraciones en producción
+COPY --from=builder /app/prisma ./prisma
+
 # Copiamos y damos permisos al script de arranque
 COPY entrypoint.sh .
 RUN chmod +x ./entrypoint.sh
