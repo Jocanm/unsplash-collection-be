@@ -28,12 +28,20 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY package.json ./
 
+
 # --- LÍNEA CLAVE AÑADIDA ---
 # Copiamos el schema de Prisma para poder correr migraciones en producción
 COPY --from=builder /app/prisma ./prisma
 
+# Copiamos y damos permisos al script de arranque
+COPY entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
+
 # Expone el puerto donde corre tu aplicación NestJS (dentro de Docker)
 EXPOSE 3000
+
+# Establece el script como el punto de entrada
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # El comando que se ejecutará para iniciar tu aplicación
 CMD ["node", "dist/main"]
